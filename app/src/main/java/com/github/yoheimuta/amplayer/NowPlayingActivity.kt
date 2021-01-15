@@ -59,7 +59,7 @@ class NowPlayingActivity: AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.now_playing)
         binding.playerView.setControllerShowTimeoutMs(0)
 
-        mediaId = "https://tik.getvisitapp.com/output/session-44/hls/session-44-Mindful-use-of-Technology.m3u8"
+        mediaId = intent.getStringExtra(NOW_PLAYING_INTENT_MEDIA_ID)
         mediaBrowser = MediaBrowserCompat(
             this,
             ComponentName(this, MusicService::class.java),

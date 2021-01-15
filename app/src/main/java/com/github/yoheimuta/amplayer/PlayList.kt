@@ -6,25 +6,22 @@ class PlayList {
 
     companion object {
 
-        var songList= mutableListOf<Pair<String,String>>()
+        var songList = mutableListOf<Session>()
 
 
         fun getCatalog(): List<MediaMetadataCompat> {
-            return songList.map { (url, title) ->
+            return songList.map { session ->
                 MediaMetadataCompat.Builder()
                     .apply {
-                        putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, url)
-                        putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, url)
-                        putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
-                        putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, "Ankit")
-                        putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, "Ankit")
+                        putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, session.videoUrl)
+                        putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, session.videoUrl)
+                        putString(MediaMetadataCompat.METADATA_KEY_TITLE, session.title)
+                        putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, session.author)
+                        putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, session.artist)
                     }
                     .build()
             }
         }
-
-
-
 
 
 //        fun getCatalog(): List<MediaMetadataCompat> {

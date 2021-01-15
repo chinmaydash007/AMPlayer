@@ -33,6 +33,8 @@ class AMPlaybackPreparer(
 
     override fun onPrepareFromMediaId(mediaId: String, playWhenReady: Boolean, extras: Bundle?) {
         musicSource.whenReady {
+            Log.d("mytag","Media ID: $mediaId")
+
             val itemToPlay: MediaMetadataCompat? = musicSource.find { item ->
                 item.id == mediaId
             }

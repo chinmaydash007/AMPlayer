@@ -32,15 +32,15 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(NOW_PLAYING_INTENT_MEDIA_ID, songs[position].mediaId)
                 startActivity(intent)
             }
-        val songList = mutableListOf<Pair<String, String>>()
+        val songList = mutableListOf<Session>()
         songList.add(
-            Pair(
-                "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
+            Session(
+                "https://tik.getvisitapp.com/output/session-44/hls/session-44-Mindful-use-of-Technology.m3u8",
                 "TEST_1A"
             )
         )
         songList.add(
-            Pair(
+            Session(
                 "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
                 "TEST_1B"
             )
@@ -61,12 +61,9 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-
-
-
     }
 
-    fun setSongsToCatelog(songList: MutableList<Pair<String, String>>) {
+    fun setSongsToCatelog(songList: MutableList<Session>) {
         PlayList.songList = songList
     }
 
