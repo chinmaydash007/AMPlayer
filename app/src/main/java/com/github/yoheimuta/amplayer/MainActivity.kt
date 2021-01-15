@@ -3,16 +3,16 @@ package com.github.yoheimuta.amplayer
 import android.content.ComponentName
 import android.content.Intent
 import android.media.AudioManager
-import androidx.databinding.DataBindingUtil
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.github.yoheimuta.amplayer.playback.MusicService
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.github.yoheimuta.amplayer.databinding.ActivityMainBinding
+import com.github.yoheimuta.amplayer.playback.MusicService
 
 private const val TAG = "MainActivity"
 
@@ -32,7 +32,27 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(NOW_PLAYING_INTENT_MEDIA_ID, songs[position].mediaId)
                 startActivity(intent)
             }
+        val songList = mutableListOf<Pair<String, String>>()
+        songList.add(
+            Pair(
+                "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
+                "TEST_1A"
+            )
+        )
+        songList.add(
+            Pair(
+                "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
+                "TEST_1B"
+            )
+        )
+//        songList.add(
+//            Pair(
+//                "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
+//                "TEST_1"
+//            )
+//        )
 
+        setSongsToCatelog(songList)
         mediaBrowser = MediaBrowserCompat(
             this,
             ComponentName(this, MusicService::class.java),
@@ -40,6 +60,14 @@ class MainActivity : AppCompatActivity() {
             null // optional Bundle
         )
 
+
+
+
+
+    }
+
+    fun setSongsToCatelog(songList: MutableList<Pair<String, String>>) {
+        PlayList.songList = songList
     }
 
     public override fun onStart() {
@@ -82,13 +110,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private inner class SubscriptionCallback: MediaBrowserCompat.SubscriptionCallback() {
-        override fun onChildrenLoaded(parentId: String, children: List<MediaBrowserCompat.MediaItem>) {
+    private inner class SubscriptionCallback : MediaBrowserCompat.SubscriptionCallback() {
+        override fun onChildrenLoaded(
+            parentId: String,
+            children: List<MediaBrowserCompat.MediaItem>
+        ) {
             songs = children
 
             val titles = songs.map { it.description.title }
             binding.listView.setAdapter(
-                ArrayAdapter(this@MainActivity, android.R.layout.simple_list_item_1, titles));
+                ArrayAdapter(this@MainActivity, android.R.layout.simple_list_item_1, titles)
+            );
         }
     }
 }

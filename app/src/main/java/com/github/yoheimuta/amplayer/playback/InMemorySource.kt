@@ -2,9 +2,7 @@ package com.github.yoheimuta.amplayer.playback
 
 import android.support.v4.media.MediaMetadataCompat
 import android.util.Log
-import com.github.yoheimuta.amplayer.MainActivity
 import com.github.yoheimuta.amplayer.PlayList
-import com.github.yoheimuta.amplayer.extensions.id
 
 class InMemorySource() : AbstractMusicSource() {
 
@@ -17,6 +15,8 @@ class InMemorySource() : AbstractMusicSource() {
     override fun iterator(): Iterator<MediaMetadataCompat> = catalog.iterator()
 
     override suspend fun load() {
+
+        Log.d("mytag", PlayList.getCatalog().toString())
         catalog = PlayList.getCatalog()
         state = STATE_INITIALIZED
     }
@@ -45,6 +45,6 @@ class InMemorySource() : AbstractMusicSource() {
 //                }
 //                .build()
 //        }
- //  }
+    //  }
 
 }
