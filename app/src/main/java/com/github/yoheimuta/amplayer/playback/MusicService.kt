@@ -96,7 +96,7 @@ class MusicService: MediaBrowserServiceCompat() {
 
             it.setPlaybackPreparer(AMPlaybackPreparer(musicSource, exoPlayer, dataSourceFactory))
             it.setPlayer(exoPlayer)
-            //it.setQueueNavigator(AMQueueNavigator(mediaSession))
+            it.setQueueNavigator(AMQueueNavigator(mediaSession))
             it.registerCustomCommandReceiver(playerCommandReceiver)
         }
 
@@ -109,7 +109,7 @@ class MusicService: MediaBrowserServiceCompat() {
             MediaDescriptionAdapter(),
             NotificationListener()
         ).apply {
-            setMediaSessionToken(sessionToken)
+            setMediaSessionToken(sessionToken!!)
             setPlayer(exoPlayer)
         }
     }
@@ -190,7 +190,7 @@ class MusicService: MediaBrowserServiceCompat() {
 
         override fun onNotificationPosted(
             notificationId: Int,
-            notification: Notification?,
+            notification: Notification,
             ongoing: Boolean
         ) {
             when {
@@ -215,12 +215,29 @@ class MusicService: MediaBrowserServiceCompat() {
     }
 
     private inner class GetPlayerCommandReceiver: MediaSessionConnector.CommandReceiver {
+//        override fun onCommand(
+//            player: Player,
+//            controlDispatcher: ControlDispatcher,
+//            command: String,
+//            extras: Bundle,
+//            cb: ResultReceiver
+//        ): Boolean {
+//            if (command != GET_PLAYER_COMMAND) {
+//                return false
+//            }
+//
+//            val bundle = Bundle()
+//            bundle.putBinder(MUSIC_SERVICE_BINDER_KEY, MusicServiceBinder())
+//            cb.send(0, bundle)
+//            return true
+
+
         override fun onCommand(
             player: Player,
             controlDispatcher: ControlDispatcher,
             command: String,
-            extras: Bundle,
-            cb: ResultReceiver
+            extras: Bundle?,
+            cb: ResultReceiver?
         ): Boolean {
             if (command != GET_PLAYER_COMMAND) {
                 return false
@@ -228,7 +245,7 @@ class MusicService: MediaBrowserServiceCompat() {
 
             val bundle = Bundle()
             bundle.putBinder(MUSIC_SERVICE_BINDER_KEY, MusicServiceBinder())
-            cb.send(0, bundle)
+            cb?.send(0, bundle)
             return true
         }
     }

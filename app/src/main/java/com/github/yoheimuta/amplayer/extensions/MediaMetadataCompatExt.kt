@@ -3,9 +3,14 @@ package com.github.yoheimuta.amplayer.extensions
 import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat.MediaItem
 import android.support.v4.media.MediaMetadataCompat
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
+import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.util.Util
 
 inline val MediaMetadataCompat.id: String?
     get() = getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)
@@ -22,10 +27,28 @@ inline val MediaMetadataCompat.fullDescription
             it.extras?.putAll(bundle)
         }
 
-fun MediaMetadataCompat.toMediaSource(dataSourceFactory: DataSource.Factory) =
-    ProgressiveMediaSource.Factory(dataSourceFactory)
-        .setTag(fullDescription)
-        .createMediaSource(mediaUri)
+fun MediaMetadataCompat.toMediaSource(dataSourceFactory: DataSource.Factory): MediaSource {
+    @C.ContentType
+    val type = Util.inferContentType(mediaUri)
+    return when(type){
+        C.TYPE_HLS -> {
+            HlsMediaSource.Factory(dataSourceFactory)
+                .setTag(fullDescription)
+                .createMediaSource(mediaUri)
+        }
+        else -> {
+            ExtractorMediaSource.Factory(dataSourceFactory)
+                .setTag(fullDescription)
+                .createMediaSource(mediaUri)
+        }
+    }
+
+}
+
+//fun MediaMetadataCompat.toMediaSource(dataSourceFactory: DataSource.Factory) =
+//    ProgressiveMediaSource.Factory(dataSourceFactory)
+//        .setTag(fullDescription)
+//        .createMediaSource(mediaUri)
 
 fun List<MediaMetadataCompat>.toMediaSource(
     dataSourceFactory: DataSource.Factory

@@ -29,7 +29,9 @@ class AMPlaybackPreparer(
 
     override fun onPrepare(playWhenReady: Boolean) = Unit
 
-    override fun onPrepareFromMediaId(mediaId: String?, playWhenReady: Boolean, extras: Bundle?) {
+
+
+    override fun onPrepareFromMediaId(mediaId: String, playWhenReady: Boolean, extras: Bundle?) {
         musicSource.whenReady {
             val itemToPlay: MediaMetadataCompat? = musicSource.find { item ->
                 item.id == mediaId
@@ -38,37 +40,26 @@ class AMPlaybackPreparer(
                 Log.w(TAG, "Content not found: MediaID=$mediaId")
             } else {
                 val metadataList = musicSource.toList()
-                //val mediaSource = metadataList.toMediaSource(dataSourceFactory)
+                val mediaSource = metadataList.toMediaSource(dataSourceFactory)
 
                 val initialWindowIndex = metadataList.indexOf(itemToPlay)
 
-                //this is for .m3u8 file formats.
-                val hlsMediaSource: HlsMediaSource.Factory =
-                    HlsMediaSource.Factory(dataSourceFactory)
-
-                val mediaSource: HlsMediaSource = hlsMediaSource.createMediaSource(
-                    Uri.parse(
-                        mediaId
-                    )
-                )
-                Log.d("mytag",mediaId.toString())
-
-                exoPlayer.setPlayWhenReady(playWhenReady)
+                exoPlayer.setPlayWhenReady(true)
                 exoPlayer.prepare(mediaSource)
                 exoPlayer.seekTo(initialWindowIndex, 0)
             }
         }
     }
 
-    override fun onPrepareFromSearch(query: String?, playWhenReady: Boolean, extras: Bundle?) = Unit
+    override fun onPrepareFromSearch(query: String, playWhenReady: Boolean, extras: Bundle?) = Unit
 
-    override fun onPrepareFromUri(uri: Uri?, playWhenReady: Boolean, extras: Bundle?) = Unit
+    override fun onPrepareFromUri(uri: Uri, playWhenReady: Boolean, extras: Bundle?) = Unit
 
     override fun onCommand(
-        player: Player?,
-        controlDispatcher: ControlDispatcher?,
-        command: String?,
+        player: Player,
+        controlDispatcher: ControlDispatcher,
+        command: String,
         extras: Bundle?,
         cb: ResultReceiver?
-    ) = false
+    ): Boolean = false
 }

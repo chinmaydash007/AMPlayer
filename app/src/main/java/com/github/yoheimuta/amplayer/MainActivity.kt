@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             ConnectionCallback(),
             null // optional Bundle
         )
+
     }
 
     public override fun onStart() {
